@@ -4,10 +4,10 @@
 
 #include "../utils/enable_if.hpp"
 #include "../utils/is_integral.hpp"
+#include "../utils/reverse_iterator.hpp"
 #include "vector_iterator.hpp"
 
 #include <iostream>
-#include <vector>
 
 namespace ft
 {
@@ -25,8 +25,8 @@ namespace ft
 
 			typedef vector_iterator<pointer>							iterator;
 			typedef vector_iterator<const_pointer>						const_iterator;
-			typedef typename std::vector<T>::reverse_iterator			reverse_iterator;
-			typedef typename std::vector<T>::reverse_iterator			const_reverse_iterator;
+			typedef ft::reverse_iterator<iterator>						reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 
 			typedef std::ptrdiff_t										difference_type;
 			typedef size_t												size_type;
@@ -100,10 +100,46 @@ namespace ft
 // -----------  ITERATORS -----------
 
 			iterator begin() { return iterator(this->_array); }
-			const_iterator begin() const { return const_iterator(this->_array); }
 
 			iterator end() { return iterator(this->_array + this->_size); }
-			const_iterator end() const { return const_iterator(this->_array + this->_size); }
+
+			reverse_iterator rbegin() { return reverse_iterator(this->end()); }
+
+			reverse_iterator rend() { return reverse_iterator(this->begin()); }
+
+// -----------  CAPACITY -----------
+
+			size_type size() const { return this->_size ;}
+
+			size_type max_size() const { return this->_alloc.max_size(); }
+
+			void resize(size_type n, value_type val = value_type())
+			{
+				if (n > this->_size)
+				{
+					if (n > this->_capacity)
+						this->reallocation(n);
+					for (size_t i = this->_size; i < n; i++)
+						this->push_back(val);
+				}
+				else if (n < this->_size)
+					for (size_t i = this->_size - n; i > 0; i--)
+						this->pop_back();
+			}
+
+			size_type capacity() const { return (this->_capacity); }
+
+			bool empty() const { return (this->_size == 0); }
+
+			void reserve (size_type n)
+			{
+				if (n > this->_capacity)
+				{
+					if (n > this->max_size())
+						throw std::length_error("vector::reserve");
+					this->reallocation(n);
+				}
+			}
 
 
 // -----------  ELEMENT ACCESS -----------
@@ -131,6 +167,15 @@ namespace ft
 					this->_alloc.construct(this->_array + this->_size, val);
 				}
 				this->_size++;
+			}
+
+			void pop_back()
+			{
+				if (!this->empty())
+				{
+					this->_alloc.destroy(this->_array + (this->_size - 1));
+					this->_size --;
+				}
 			}
 
 			void clear()
