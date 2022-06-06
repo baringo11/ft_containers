@@ -11,8 +11,6 @@
 
 	 
 // ******************* TODO: make own allocator and iterator
-//template <class T>
-//typename std::vector<T>::iterator  std_vector_iterator;
 
 namespace ft
 {
@@ -66,6 +64,7 @@ namespace ft
 			}
 		
 			vector (const vector& x)
+			: _array(NULL), _size(0), _capacity(0)
 			{
 				*this = x;
 			}
@@ -91,6 +90,7 @@ namespace ft
 					this->~vector();
 					this->_size = x._size;
 					this->_capacity = x._capacity;
+					this->_alloc = x._alloc;
 					if (this->_capacity != 0)
 						this->_array = this->_alloc.allocate(this->_capacity);
 					for (size_t i = 0; i < this->_size; i++)
@@ -135,6 +135,12 @@ namespace ft
 				this->_size++;
 			}
 
+			void clear()
+			{
+				for (size_t i = 0; i < this->_size; i++)
+					this->_alloc.destroy(this->_array + i);
+				this->_size = 0;
+			}
 	
 		private:
 
