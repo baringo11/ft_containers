@@ -100,12 +100,16 @@ namespace ft
 // -----------  ITERATORS -----------
 
 			iterator begin() { return iterator(this->_array); }
+			const_iterator begin() const { return const_iterator(this->_array); }
 
 			iterator end() { return iterator(this->_array + this->_size); }
+			const_iterator end() const { return const_iterator(this->_array + this->_size); }
 
 			reverse_iterator rbegin() { return reverse_iterator(this->end()); }
+			const_reverse_iterator rbegin() const { return const_reverse_iterator(this->end()); }
 
 			reverse_iterator rend() { return reverse_iterator(this->begin()); }
+			const_reverse_iterator rend() const { return const_reverse_iterator(this->begin()); }
 
 // -----------  CAPACITY -----------
 
@@ -141,13 +145,29 @@ namespace ft
 				}
 			}
 
-
 // -----------  ELEMENT ACCESS -----------
 
-			reference operator[] (size_type n)
+			reference operator[] (size_type n) { return (this->_array[n]); }
+			const_reference operator[] (size_type n) const { return (this->_array[n]); }
+			
+			reference at(size_type n)
 			{
+				if (n >= this->_size)
+					throw std::out_of_range("Index out of vector bounds!");
 				return (this->_array[n]);
 			}
+			const_reference	at (size_type n) const
+			{
+				if (n >= this->_size)
+					throw std::out_of_range("Index out of vector bounds!");
+				return (this->_array[n]);
+			}
+
+			reference front() { return (this->_array[0]); }
+			const_reference front() const { return (this->_array[0]); }
+
+			reference back() { return (this->_array[this->_size - 1]); }
+			const_reference back() const { return (this->_array[this->_size - 1]); }
 
 // -----------  MODIFIERS -----------
 
@@ -174,7 +194,7 @@ namespace ft
 				if (!this->empty())
 				{
 					this->_alloc.destroy(this->_array + (this->_size - 1));
-					this->_size --;
+					this->_size--;
 				}
 			}
 
