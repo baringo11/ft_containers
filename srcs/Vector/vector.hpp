@@ -312,6 +312,13 @@ namespace ft
 					this->_alloc.destroy(this->_array + i);
 				this->_size = 0;
 			}
+
+// -----------  ALLOCATOR -----------
+
+			allocator_type get_allocator() const
+			{
+				return (this->_alloc);
+			}
 	
 		private:
 
