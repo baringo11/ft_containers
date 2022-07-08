@@ -7,25 +7,36 @@ INCL = 		srcs/utils/reverse_iterator.hpp \
 			srcs/Vector/vector.hpp srcs/Vector/vector_iterator.hpp
 
 FILES = srcs/main.cpp
+FT_OBJS = $(addprefix $(OBJ_DIR)/,$(FILES:.cpp=.o_ft))
+STD_OBJS =	$(addprefix $(OBJ_DIR)/,$(FILES:.cpp=.o_std))
 
 OBJ_DIR = obj
 OBJ = $(addprefix $(OBJ_DIR)/,$(FILES:.cpp=.o))
 
 all: $(NAME)
 
-$(OBJ_DIR)/%.o: %.cpp ${INCL} Makefile
-	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+${NAME}:	${NAME}_ft
 
-$(NAME): $(OBJ)
-	$(CXX) -o $@ $(OBJ)
+$(OBJ_DIR)/%.o_ft:	%.cpp ${INCL} Makefile
+		@mkdir -p $(@D)
+		$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o_std:	%.cpp ${INCL} Makefile
+			@mkdir -p $(@D)
+			$(CXX) $(CXXFLAGS) -DNS=std -c $< -o $@
+
+$(NAME)_ft: 	$(FT_OBJS) $(STD_OBJS)
+	${CXX} ${CXXFLAGS} -o ${NAME}_ft  ${FT_OBJS}
+	${CXX} ${CXXFLAGS} -o ${NAME}_std  $(STD_OBJS)
+	./${NAME}_ft  > .ft
+	./${NAME}_std > .std
 
 clean :
-	rm -f *.o
+	rm -f *.o_ft *.o_std .ft .std
 	rm -rf obj
 
 fclean : clean
-	rm -f $(NAME)
+	rm -f $(NAME)_ft $(NAME)_std
 
 re: fclean all
 
