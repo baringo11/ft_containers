@@ -171,6 +171,28 @@ namespace ft
 
 // -----------  MODIFIERS -----------
 
+			void assign(size_type n, const value_type& val)
+			{
+				this->clear();
+				for (size_type i = 0; i < n; i++)
+					this->push_back(val);
+			}
+
+			template <class InputIterator>
+			void assign(typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
+			{
+				size_t	i = last - first;
+				this->clear();
+
+				if (this->_capacity < i)
+					this->reserve(i);
+				while (first != last)
+				{
+					this->push_back(*first);
+					first++;
+				}
+			}
+
 			void push_back (const value_type& val)
 			{
 				if (this->_size < this->_capacity)
@@ -196,6 +218,92 @@ namespace ft
 					this->_alloc.destroy(this->_array + (this->_size - 1));
 					this->_size--;
 				}
+			}
+
+			iterator insert(iterator position, const value_type& val)
+			{
+				if (this->_capacity == this->max_size())
+					return (NULL);
+				if (this->_capacity == 0)
+				{
+					this->push_back(val);
+					return (this->begin());
+				}
+				if (this->_capacity == this->_size)
+				{
+					std::ptrdiff_t pos = position - this->begin();
+					this->reallocation(2 * this->_capacity);
+					position = this->begin() + pos;
+				}
+				vector tmp(position, this->end());
+				for (size_t i = 0; i < tmp.size(); i++)
+					this->pop_back();
+				this->push_back(val);
+				for (iterator it = tmp.begin(); it != tmp.end(); it++)
+					this->push_back(*it);
+
+				return (position);
+			}
+
+			void insert(iterator position, size_type n, const value_type& val)
+			{
+				for (size_type i = 0; i < n; i++)
+					position = this->insert(position, val);
+			}
+
+			template <class InputIterator>
+			void insert(iterator position, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first,
+				InputIterator last)
+			{
+				for (; first != last; first++)
+				{
+					position = this->insert(position, *first);
+					position++;
+				}
+			}
+
+			iterator erase(iterator position)
+			{
+				if (this->empty() == true || position > this->end())
+					return (NULL);
+
+				vector tmp(position + 1, this->end());
+
+				for (size_t i = 0; i <= tmp.size(); i++)
+					this->pop_back();
+				for (iterator it = tmp.begin(); it != tmp.end(); it++)
+					this->push_back(*it);
+				return position;
+			}
+
+			iterator erase(iterator first, iterator last)
+			{
+				if (this->empty() == true || last > this->end() || first > this->end())
+					return (NULL);
+				iterator tmp = first;
+				while (tmp != last)
+				{
+					erase(first);
+					tmp++;
+				}
+				return (first);
+			}
+
+			void swap(vector& x)
+			{
+				allocator_type tmp_alloc = x._alloc;
+				size_type tmp_size = x._size;
+				size_type tmp_capacity = x._capacity;
+				pointer tmp_array = x._array;
+
+				x._alloc = this->_alloc;
+				this->_alloc = tmp_alloc;
+				x._size = this->_size;
+				this->_size = tmp_size;
+				x._capacity = this->_capacity;
+				this->_capacity = tmp_capacity;
+				x._array = this->_array;
+				this->_array = tmp_array;
 			}
 
 			void clear()
