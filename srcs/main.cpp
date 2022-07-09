@@ -5,6 +5,8 @@
 
 #include <vector>
 #include <stack>
+#include <list>
+#include <deque>
 #include <iterator>
 
 #ifndef NS
@@ -569,6 +571,180 @@ int main()
 			std::cout << "foo is less than or equal to baz" << std::endl;
 		if (foo >= baz)
 			std::cout << "foo is greater than or equal to baz" << std::endl;
+	}
+}
+
+/* ///////////////  STACK  \\\\\\\\\\\\\\\\ */
+{}
+{
+	std::cout << "\n\n\n*************************************************************************" << std::endl;
+	std::cout << "**************************    STACK    **********************************" << std::endl;
+	std::cout << "*************************************************************************" << std::endl;
+	
+	// ------ CONSTRUCTORS ------
+	{
+		std::cout << "\n------------- FT Stack (Constructor)-------------" << std::endl;
+		NS::vector<int> myvector(2,200);
+		NS::stack<int> first;
+		NS::stack<int, NS::vector<int> > second;
+		NS::stack<int, NS::vector<int> > third(myvector);
+
+		std::cout << "size of first:  " << first.size() << std::endl;
+		std::cout << "size of second: " << second.size() << std::endl;
+		std::cout << "size of third   " << third.size() << std::endl;
+		std::cout << std::endl;
+		std::cout << "third.top() is: " << third.top() << std::endl;
+	}
+	// ------ EMPTY ------
+	{
+		std::cout << "\n------------- FT Stack (empty)-------------" << std::endl;
+		NS::stack<std::string> mystack;
+		std::cout << "Is mysyack empty?:            " << mystack.empty() << std::endl;
+		mystack.push("hola");
+		mystack.push("hi");
+		mystack.push("hello");
+		mystack.push("salut");
+		mystack.push("hallo");
+		mystack.push("ciao");
+		std::cout << "mystack size is now: " << mystack.size() << std::endl;
+		std::cout << "Is mystack empty?:            " << mystack.empty() << std::endl;
+		while (!mystack.empty())
+			mystack.pop();
+		std::cout << "mystack size is now: " << mystack.size() << std::endl;
+		std::cout << "Is mystack empty?:            " << mystack.empty() << std::endl;
+	}
+	// ------ SIZE ------
+	{
+		std::cout << "\n------------- FT Stack (Size)-------------" << std::endl;
+		NS::stack<int> myints;
+		std::cout << "mystack size is: " << myints.size() << std::endl;
+		for (int i = 0; i < 5; i++)
+			myints.push(i);
+		std::cout << "mystack size is: " << myints.size() << std::endl;
+		myints.pop();
+		std::cout << "mystack size is: " << myints.size() << std::endl;
+	}
+	// ------ TOP ------
+	{
+		std::cout << "\n------------- FT Stack (Top)-------------" << std::endl;
+		NS::stack<int> mystack;
+		mystack.push(10);
+		mystack.push(20);
+		mystack.top() -= 5;
+		std::cout << "mystack.top() is now:      " << mystack.top() << std::endl;
+		const NS::stack<int> const_stack(mystack);
+		std::cout << "const_stack.top() is also: " << const_stack.top() << std::endl;
+	}
+	// ------ PUSH / POP ------
+	{
+		std::cout << "\n------------- FT Stack (Push/Pop)-------------" << std::endl;
+		NS::stack<int> mystack;
+		for (int i = 0; i < 5; ++i)
+			mystack.push(i);
+		std::cout << "size is now: " << mystack.size() << std::endl;
+		std::cout << "Popping out elements...";
+		while (!mystack.empty())
+		{
+			std::cout << ' ' << mystack.top();
+			mystack.pop();
+		}
+		std::cout << " ...size is now: " << mystack.size() << std::endl;
+		std::cout << std::endl;
+	}
+	//  RELATIONAL OPERATORS:
+	{
+		// ------ == / != ------
+		{
+			std::cout << "\n------------- FT Stack (operator== / operator!=)-------------" << std::endl;
+			NS::stack<int, NS::vector<int> > s1, s2, s3;
+			s1.push(1);
+			s1.push(2);
+
+			s2.push(1);
+			s2.push(2);
+
+			s3.push(1);
+			s3.push(2);
+			s3.push(3);
+
+			if (s1 == s2)
+				std::cout << "The stacks s1 and s2 are equal." << std::endl;
+			if (s1 != s2)
+				std::cout << "The stacks s1 and s2 are not equal." << std::endl;
+
+			if (s1 == s3)
+				std::cout << "The stacks s1 and s3 are equal." << std::endl;
+			if (s1 != s3)
+				std::cout << "The stacks s1 and s3 are not equal." << std::endl;
+		}
+		// ------ >= / < ------
+		{
+			std::cout << "\n------------- FT Stack (operator>= / operator<)-------------" << std::endl;
+			NS::stack<int, NS::vector<int> > s1, s2, s3;
+			s1.push(2);
+			s1.push(4);
+			s1.push(6);
+			s1.push(8);
+
+			s2.push(5);
+			s2.push(10);
+
+			s3.push(2);
+			s3.push(4);
+			s3.push(6);
+			s3.push(8);
+
+			if (s1 < s2)
+				std::cout << "The stack s1 is less than the stack s2." << std::endl;
+			if (s1 >= s2)
+				std::cout << "The stack s1 is greater than or equal to the stack s2." << std::endl;
+			if (s1 < s3)
+				std::cout << "The stack s1 is less than the stack s3." << std::endl;
+			if (s1 >= s3)
+				std::cout << "The stack s1 is greater than or equal to the stack s3." << std::endl;
+		}
+		// ------ <= / > ------
+		{
+			std::cout << "\n------------- FT Stack (operator<= / operator>)-------------" << std::endl;
+			NS::stack<int> s1, s2, s3;
+			s1.push(5);
+			s1.push(10);
+
+			s2.push(1);
+			s2.push(2);
+
+			s3.push(5);
+			s3.push(10);
+
+			if (s1 <= s2)
+				std::cout << "The stack s1 is less than or equal to the stack s2." << std::endl;
+			if (s1 > s2)
+				std::cout << "The stack s1 is greater than the stack s2." << std::endl;
+			if (s1 <= s3)
+				std::cout << "The stack s1 is less than or equal to the stack s3." << std::endl;
+			if (s1 > s3)
+				std::cout << "The stack s1 is greater than the stack s3." << std::endl;
+		}
+	}
+	// ------ OTHER CONTAINERS COMPATIBILITY ------
+	{
+		std::cout << "\n------------- FT Stack (deque compatibility)-------------" << std::endl;
+		NS::stack<int, std::deque<int> > deque_stack;
+		std::cout << "myints size: " << deque_stack.size() << std::endl;
+		for (int i = 0; i < 5; i++)
+			deque_stack.push(i);
+		std::cout << "myints size: " << deque_stack.size() << std::endl;
+		deque_stack.pop();
+		std::cout << "myints size: " << deque_stack.size() << std::endl;
+
+		std::cout << "\n------------- FT Stack (list compatibility)-------------" << std::endl;
+		NS::stack<int, std::list<int> > list_stack;
+		std::cout << "myints size: " << list_stack.size() << std::endl;
+		for (int i = 0; i < 5; i++)
+			list_stack.push(i);
+		std::cout << "myints size: " << list_stack.size() << std::endl;
+		list_stack.pop();
+		std::cout << "myints size: " << list_stack.size() << std::endl;
 	}
 }
 

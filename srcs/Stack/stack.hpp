@@ -22,8 +22,9 @@ namespace ft
 
 			explicit stack(const container_type& ctnr = container_type()) : _cnt(ctnr){}
 			
-			stack(const stack<T, Container>& src) : _cnt(src)
+			stack(const stack<T, Container>& src)
 			{
+				this->_cnt = src._cnt;
 				*this = src;
 			} 
 
