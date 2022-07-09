@@ -6,7 +6,7 @@ INCL = 		srcs/utils/reverse_iterator.hpp srcs/utils/lexicographical_compare.hpp 
 			srcs/utils/enable_if.hpp srcs/utils/is_integral.hpp srcs/utils/iterator_traits.hpp \
 			srcs/Vector/vector.hpp srcs/Vector/vector_iterator.hpp \
 			srcs/Stack/stack.hpp \
-			srcs/Map/map.hpp
+			srcs/Map/map.hpp srcs/Map/tree_iterator.hpp 
 
 FILES = srcs/main.cpp
 FT_OBJS = $(addprefix $(OBJ_DIR)/,$(FILES:.cpp=.o_ft))

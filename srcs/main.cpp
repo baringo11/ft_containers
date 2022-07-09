@@ -2,11 +2,13 @@
 #include <iostream>
 #include "Vector/vector.hpp"
 #include "Stack/stack.hpp"
+#include "Map/map.hpp"
 
 #include <vector>
 #include <stack>
 #include <list>
 #include <deque>
+#include <map>
 #include <iterator>
 
 #ifndef NS
