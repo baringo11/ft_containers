@@ -1,8 +1,7 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
-#include <functional>
-#include <utility>
+#include <iostream>
 
 #include "../utils/reverse_iterator.hpp"
 #include "../utils/enable_if.hpp"
@@ -11,16 +10,17 @@
 #include "../utils/equal.hpp"
 
 #include "tree_iterator.hpp"
+#include "pair.hpp"
 
 namespace ft
 {
-	template<class key, class T, class Compare = std::less<key>, class Alloc = std::allocator<std::pair<const key,T> > >
+	template<class key, class T, class Compare = std::less<key>, class Alloc = std::allocator<ft::node<ft::pair<const key,T> > > >
 	class map
 	{
 		public:
 			typedef key															key_type;
 			typedef T															mapped_type;
-			typedef std::pair<const key_type, mapped_type>						value_type;
+			typedef ft::pair<const key_type, mapped_type>						value_type;
 			typedef Compare														key_compare;
 			typedef Alloc														allocator_type;
 
@@ -42,6 +42,7 @@ namespace ft
 
 			class value_compare : public std::binary_function<value_type, value_type, bool>
 			{
+				friend class map;
 				protected:
 					Compare comp;
 					value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
@@ -54,8 +55,24 @@ namespace ft
 						return comp(x.first, y.first);
 					}
 			};
-			
 
+		private:
+			node_ptr		_root;
+			allocator_type	_alloc;
+			size_type		_size;
+			key_compare		_key_cmp;
+			value_compare	_val_cmp;
+
+		public:
+
+// -----------  CONSTRUCTORS -----------
+
+			explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :
+				_root(NULL), _alloc(alloc), _size(0), _key_cmp(comp), _val_cmp(_key_cmp)
+			{
+				this->_root = this->_alloc.allocate(1);
+				this->_alloc.construct(this->_root, node_type());
+			}
 	};
 }
 
