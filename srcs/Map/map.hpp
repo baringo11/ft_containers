@@ -74,22 +74,22 @@ namespace ft
 				this->_alloc.construct(this->_root, node_type());
 			}
 
-			// template <class InputIterator> 
-			// map (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, 
-			// 	const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :
-			// 	_root(NULL), _alloc(alloc), _size(0), _key_cmp(comp), _val_cmp(_key_cmp)
-			// {
-			// 	this->_root = this->_alloc.allocate(1);
-			// 	this->_alloc.construct(this->_root, node_type());
-			// 	this->insert(first, last);
-			// }
+			template <class InputIterator> 
+			map (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, 
+				const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :
+				_root(NULL), _alloc(alloc), _size(0), _key_cmp(comp), _val_cmp(_key_cmp)
+			{
+				this->_root = this->_alloc.allocate(1);
+				this->_alloc.construct(this->_root, node_type());
+				this->insert(first, last);
+			}
 
-			// map (const map& x) : _root(NULL), _alloc(allocator_type()), _size(0), _key_cmp(key_compare()), _val_cmp(_key_cmp)
-			// {
-			// 	this->_root = this->_alloc.allocate(1);
-			// 	this->_alloc.construct(this->_root, node_type());
-			// 	*this = x;
-			// }
+			map (const map& x) : _root(NULL), _alloc(allocator_type()), _size(0), _key_cmp(key_compare()), _val_cmp(_key_cmp)
+			{
+				this->_root = this->_alloc.allocate(1);
+				this->_alloc.construct(this->_root, node_type());
+				*this = x;
+			}
 
 // ----------- DESTRUCTOR -----------
 
@@ -145,20 +145,18 @@ namespace ft
 				return (ret);
 			}
 
-			// iterator insert(iterator position, const value_type& val)
-			// {
-			// 	static_cast<void>(position);
-			// 	return this->insert(val).first;
-			// }
+			iterator insert(iterator position, const value_type& val)
+			{
+				static_cast<void>(position);
+				return this->insert(val).first;
+			}
 
-			// template <class InputIterator>
-			// void insert(InputIterator first, InputIterator last)
-			// {
-			// 		std::cout << "Map Insert INPUT ITERATOR" <<std::endl;
-			// 	while (first != last)
-			// 	//std::cout << "*first++" << *first++ <<std::endl;
-			// 		this->insert(*first++);
-			// }
+			template <class InputIterator>
+			void insert(InputIterator first, InputIterator last)
+			{
+				while (first != last)
+					this->insert(*first++);
+			}
 
 			// void clear(void)
 			// {
