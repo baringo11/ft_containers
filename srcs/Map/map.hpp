@@ -95,22 +95,21 @@ namespace ft
 
 			virtual ~map(void)
 			{
-				//this->clear();
+				this->clear();
 				this->_alloc.deallocate(this->_root, 1);
 			}
 
 // -----------  OPERATOR = OVERLOAD -----------
 
-// 			map& operator= (map const &rhs)
-// 			{
-// //					std::cout << "Map Operator = " <<std::endl;
-// 				if (this != &rhs)
-// 				{
-// 					this->clear();
-// 					this->insert(rhs.begin(), rhs.end());
-// 				}
-// 				return (*this);
-// 			}
+			map& operator= (map const &rhs)
+			{
+				if (this != &rhs)
+				{
+					this->clear();
+					this->insert(rhs.begin(), rhs.end());
+				}
+				return (*this);
+			}
 
 // -----------  ITERATORS -----------
 
@@ -158,12 +157,33 @@ namespace ft
 					this->insert(*first++);
 			}
 
-			// void clear(void)
-			// {
-			// 	if (this->_size == 0)
-			// 		return ;
-			// 	erase(begin(), end());
-			// }
+			void erase(iterator position)
+			{
+				this->_del_node(position.base());
+			}
+
+			size_type erase(const key_type& k)
+			{
+				iterator it = this->find(k);
+
+				if (it == this->end())
+					return (0);
+				this->_del_node(it.base());
+				return (1);
+			}
+
+			void erase(iterator first, iterator last)
+			{
+				while (first != last) 
+					this->erase(first++);
+			}
+
+			void clear(void)
+			{
+				if (this->_size == 0)
+					return ;
+				erase(begin(), end());
+			}
 
 // -----------  OPERATIONS -----------
 
@@ -220,6 +240,57 @@ namespace ft
 					endnode->parent = rightmost(to_add);
 					rightmost(to_add)->right = endnode;
 				}
+			}
+
+			void _del_node(node_ptr to_del)
+			{
+				if (!to_del->left)
+				{
+					if (!to_del->parent)
+						this->_root = to_del->right;
+					else if (to_del == to_del->parent->left)
+						to_del->parent->left = to_del->right;
+					else
+						to_del->parent->right = to_del->right;
+					if (to_del->right)
+						to_del->right->parent = to_del->parent;
+				}
+				else if (!to_del->right)
+				{
+					if (!to_del->parent)
+						this->_root = to_del->left;
+					else if (to_del == to_del->parent->left)
+						to_del->parent->left = to_del->left;
+					else
+						to_del->parent->right = to_del->left;
+					to_del->left->parent = to_del->parent;
+				}
+				else
+				{
+					node_ptr	successor = leftmost(to_del->right);
+					if (!(to_del == successor->parent))
+					{
+						if (successor == successor->parent->left)
+							successor->parent->left = successor->right;
+						else
+							successor->parent->right = successor->right;
+						if (successor->right != NULL)
+							successor->right->parent = successor->parent;
+						successor->right = to_del->right;
+						successor->right->parent = successor;
+					}
+					if (!to_del->parent)
+						this->_root = successor;
+					else if (to_del == to_del->parent->left)
+						to_del->parent->left = successor;
+					else
+						to_del->parent->right = successor;
+					successor->parent = to_del->parent;
+					successor->left = to_del->left;
+					successor->left->parent = successor;
+				}
+				--this->_size;
+				this->_alloc.deallocate(to_del, 1);
 			}
 	};
 }
