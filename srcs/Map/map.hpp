@@ -259,9 +259,99 @@ namespace ft
 
 			const_iterator find(const key_type& k) const
 			{
-				return const_iterator(this->find(k));
+				node_ptr	curr = this->_root;
+
+				while (curr && (this->_key_cmp(curr->data.first, k) || this->_key_cmp(k, curr->data.first)))
+				{
+					if (this->_key_cmp(k, curr->data.first))
+						curr = curr->left;
+					else
+						curr = curr->right;
+				}
+				if (curr)
+					return (const_iterator(curr));
+				else
+					return (this->end());
 			}
 
+			size_type count(const key_type& k) const
+			{
+				return (find(k) != this->end() ? 1 : 0);
+			}
+
+			iterator lower_bound(const key_type& k)
+			{
+				iterator	it_beg = this->begin();
+				iterator	it_end = this->end();
+
+				while (it_beg != it_end)
+				{
+					if (!this->_key_cmp(it_beg->first, k))
+						break;
+					++it_beg;
+				}
+				return (it_beg);
+			}
+
+			const_iterator lower_bound(const key_type& k) const
+			{
+				const_iterator	it_beg = this->begin();
+				const_iterator	it_end = this->end();
+
+				while (it_beg != it_end)
+				{
+					if (!this->_key_cmp(it_beg->first, k))
+						break;
+					++it_beg;
+				}
+				return (it_beg);
+			}
+
+			iterator upper_bound(const key_type& k)
+			{
+				iterator	it_beg = this->begin();
+				iterator	it_end = this->end();
+
+				while (it_beg != it_end)
+				{
+					if (this->_key_cmp(k, it_beg->first))
+						break;
+					++it_beg;
+				}
+				return (it_beg);
+			}
+
+			const_iterator upper_bound(const key_type& k) const
+			{
+				const_iterator	it_beg = this->begin();
+				const_iterator	it_end = this->end();
+
+				while (it_beg != it_end)
+				{
+				if (this->_key_cmp(k, it_beg->first))
+						break;
+					++it_beg;
+				}
+				return (it_beg);
+			}
+
+			ft::pair<iterator,iterator> equal_range(const key_type& k)
+			{
+				ft::pair<iterator, iterator> ret;
+
+				ret.first = this->lower_bound(k);
+				ret.second = this->upper_bound(k);
+				return (ret);
+			}
+
+			ft::pair<const_iterator,const_iterator>	equal_range(const key_type& k) const
+			{
+				ft::pair<const_iterator, const_iterator> ret;
+
+				ret.first = this->lower_bound(k);
+				ret.second = this->upper_bound(k);
+				return (ret);
+			}
 
 // -----------  PRIVATE FUNCTIONS -----------
 
