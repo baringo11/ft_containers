@@ -22,7 +22,7 @@ int main()
 {
 	std::cout << "------------------- Testing " << ASSTR(NS) << " containers -------------------" << std::endl;
 
-/* //////////////// VECTOR \\\\\\\\\\\\\\\\ */
+/* ///////////////  VECTOR  \\\\\\\\\\\\\\\ */
 {
 	std::cout << "\n\n\n*************************************************************************" << std::endl;
 	std::cout << "**************************   VECTOR   ***********************************" << std::endl;
@@ -576,7 +576,7 @@ int main()
 	}
 }
 
-/* ///////////////  STACK  \\\\\\\\\\\\\\\\ */
+/* ///////////////  STACK   \\\\\\\\\\\\\\\ */
 {}
 {
 	std::cout << "\n\n\n*************************************************************************" << std::endl;
@@ -750,7 +750,7 @@ int main()
 	}
 }
 
-/* ///////////////   MAP   \\\\\\\\\\\\\\\\ */
+/* ///////////////   MAP    \\\\\\\\\\\\\\\ */
 {}
 {
 	std::cout << "\n\n\n*************************************************************************" << std::endl;
@@ -828,6 +828,304 @@ int main()
 		}
 	}
 
+	// ------ CONSTRUCTORS ------
+	{
+		std::cout << "\n------------- FT Map (construct) -------------" << std::endl;
+		NS::map<char, int> first;
+		std::cout << "First map is :" <<std::endl;
+		for (NS::map<char, int>::iterator i = first.begin(); i != first.end(); i++)
+			std::cout << i->first << "\t" << i->second << std::endl;
+		first['a'] = 10;
+		first['b'] = 30;
+		first['c'] = 50;
+		first['d'] = 70;
+
+		NS::map<char, int> second(first.begin(), first.end());
+		std::cout << "Second map is :" <<std::endl;
+		for (NS::map<char, int>::iterator i = second.begin(); i != second.end(); i++)
+			std::cout << i->first << "\t" << i->second << std::endl;
+
+		NS::map<char, int> third(second);
+		std::cout << "Third map is :" <<std::endl;
+		for (NS::map<char, int>::iterator i = third.begin(); i != third.end(); i++)
+			std::cout << i->first << "\t" << i->second << std::endl;
+	}
+	// ------ OPERATOR = ------
+	{
+		std::cout << "\n------------- FT Map (operator=) -------------" << std::endl;
+		NS::map<char, int> first;
+		NS::map<char, int> second;
+		first['x'] = 8;
+		first['y'] = 16;
+		first['z'] = 32;
+		second = first;
+		first = NS::map<char, int>();
+		std::cout << "Size of first (should now be 0):                " << first.size() << std::endl;
+		std::cout << "Size of second (should now contain 3 elements): " << second.size() << std::endl;
+	}
+	// ------ OPERATOR [] ------
+	{
+		std::cout << "\n------------- FT Map (operator[]) -------------" << std::endl;
+		NS::map<char, std::string> mymap;
+		mymap['a'] = "an element";
+		mymap['b'] = "another element";
+		mymap['c'] = mymap['b'];
+		std::cout << "mymap['a'] is " << mymap['a'] << std::endl;
+		std::cout << "mymap['b'] is " << mymap['b'] << std::endl;
+		std::cout << "mymap['c'] is " << mymap['c'] << std::endl;
+		std::cout << "mymap['d'] is " << mymap['d'] << std::endl;
+		std::cout << "mymap now contains " << mymap.size() << " elements." << std::endl;
+	}
+	// ------ EMPTY ------
+	{
+		std::cout << "\n------------- FT Map (empty) -------------" << std::endl;
+		NS::map<char, int> mymap;
+		mymap['a'] = 10;
+		mymap['b'] = 20;
+		mymap['c'] = 30;
+		std::cout << "Is map  empty (should be 0)?     " << mymap.empty() << std::endl;
+		while (!mymap.empty())
+		{
+			std::cout << "Erasing pair " << mymap.begin()->first << " => " << mymap.begin()->second << std::endl;
+			mymap.erase(mymap.begin());
+		}
+		std::cout << "Is map now empty (should be 1)?  " << mymap.empty() << std::endl;
+	}
+	// ------ SIZE ------
+	{
+		std::cout << "\n------------- FT Map (size) -------------" << std::endl;
+		NS::map<char, int> mymap;
+		std::cout << "Size of mymap:   " << mymap.size() << std::endl;
+		mymap['a'] = 10;
+		mymap['b'] = 20;
+		mymap['c'] = 30;
+		std::cout << "Size of mymap:   " << mymap.size() << std::endl;
+		mymap.erase(mymap.begin());
+		std::cout << "Size of mymap:   " << mymap.size() << std::endl;
+
+		std::cout << "\n------------- FT Map (max_size) -------------" << std::endl;
+		std::cout << "The maximum size our map could grow up to is " << mymap.max_size() << std::endl;
+	}
+	// MODIFIERS:
+	{
+		// ------ INSERT ------
+		{
+			std::cout << "\n------------- FT Map (insert) -------------" << std::endl;
+			NS::map<char, int> mymap;
+			mymap.insert(NS::pair<char, int>('a', 100));
+			mymap.insert(NS::make_pair('z', 200));
+			NS::pair<NS::map<char, int>::iterator, bool> ret = mymap.insert(NS::pair<char, int>('z', 500));
+			if (ret.second == false)
+				std::cout << "element 'z' already existed with a value of " << ret.first->second << std::endl;
+			std::cout << "mymap is of size (should be 2): " << mymap.size() << std::endl << std::endl;
+
+			NS::map<char, int>::iterator it = mymap.begin();
+			mymap.insert(it, NS::pair<char, int>('b', 300));
+			mymap.insert(it, NS::pair<char, int>('c', 400));
+			std::cout << "mymap now contains a, b, c and z:" << std::endl;
+			for (it = mymap.begin(); it != mymap.end(); ++it)
+				std::cout << it->first << " => " << it->second << std::endl;
+
+			NS::map<char, int> anothermap;
+			anothermap.insert(mymap.begin(), mymap.end());
+			std::cout << "\nanothermap now also contains a, b, c and z:" << std::endl;
+			for (NS::map<char, int>::iterator i = anothermap.begin(); i != anothermap.end(); i++)
+			{
+				std::cout << i->first << " => " << i->second << std::endl;
+			}
+
+			std::cout << "\nlastmap contains (check how is printed in order):" << std::endl;
+			NS::map<char, int> lastmap;
+			lastmap.insert(NS::pair<char, int>('n', 200));
+			NS::map<char, int>::iterator root = lastmap.begin();
+			lastmap.insert(NS::pair<char, int>('s', 100));
+			lastmap.insert(NS::pair<char, int>('f', 500));
+			lastmap.insert(NS::pair<char, int>('j', 400));
+			lastmap.insert(NS::pair<char, int>('b', 300));
+			lastmap.insert(NS::pair<char, int>('r', 700));
+			lastmap.insert(NS::pair<char, int>('d', 600));
+			lastmap.insert(NS::pair<char, int>('y', 800));
+			for (NS::map<char, int>::iterator ite = lastmap.begin(); ite != lastmap.end(); ite++)
+			{
+				std::cout << ite->first << " => " << ite->second << std::endl;
+			}
+
+			std::cout << std::endl;
+			std::cout << "lastmap root is: " << root->first << " => " << root->second << std::endl;
+		}
+		// ------ ERASE ------
+		{
+			std::cout << "\n------------- FT Map (erase) -------------" << std::endl;
+			NS::map<int, char> mymap;
+			mymap[10] = 'a';
+			mymap[8] = 'b';
+			mymap[5] = 'c';
+			mymap[2] = 'd';
+			mymap[13] = 'e';
+			mymap[7] = 'f';
+			mymap[6] = 'g';
+			mymap[9] = 'h';
+			mymap.erase(mymap.find(10));				// Erase position
+			mymap.erase(5);								// Erase key
+			mymap.erase(mymap.find(7), mymap.end());	// Erase range
+			std::cout << "Map should now only contain d and g" << std::endl;
+			for (NS::map<int, char>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+			{
+				std::cout << it->first << " => " << it->second << std::endl;
+			}
+		}
+		// ------ SWAP ------
+		{
+			std::cout << "\n------------- FT Map (swap) -------------" << std::endl;
+			NS::map<char, int> foo, bar;
+			foo['x'] = 100;
+			foo['y'] = 200;
+			bar['a'] = 11;
+			bar['b'] = 22;
+			bar['c'] = 33;
+			foo.swap(bar);
+			std::cout << "foo contains now (should be 3 elements):" << std::endl;
+			for (NS::map<char, int>::iterator it = foo.begin(); it != foo.end(); ++it)
+				std::cout << it->first << " => " << it->second << std::endl;
+			std::cout << "bar contains now (should be 2 elements):" << std::endl;
+			for (NS::map<char, int>::iterator it = bar.begin(); it != bar.end(); ++it)
+				std::cout << it->first << " => " << it->second << std::endl;
+		}
+		// ------ CLEAR ------
+		{
+			std::cout << "\n------------- FT Map (clear) -------------" << std::endl;
+			NS::map<char, int> mymap;
+			mymap['x'] = 100;
+			mymap['y'] = 200;
+			mymap['z'] = 300;
+			std::cout << "mymap size: " <<  mymap.size() << std::endl;
+			std::cout << "mymap contains:" << std::endl;
+			for (NS::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+				std::cout << "  " << it->first << " => " << it->second << std::endl;
+			mymap.clear();
+			std::cout << "CLEAR!" << std::endl;
+			std::cout << "mymap size: " <<  mymap.size() << std::endl;
+			std::cout << "mymap contains:" << std::endl;
+			for (NS::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+				std::cout << it->first << " => " << it->second << std::endl;
+		}
+	}	
+	// OBSERVERS:
+	{
+		// ------ KEY COMPARE ------
+		{
+			std::cout << "\n------------- FT Map (key_comp) -------------" << std::endl;
+			std::map<char,int> mymap;
+			std::map<char,int>::key_compare mycomp = mymap.key_comp();
+			mymap['a']=100;
+			mymap['b']=200;
+			mymap['c']=300;
+			std::cout << "browsing mymap using its key_comp funciton object:" << std::endl;
+			char highest = mymap.rbegin()->first;     // key value of last element
+			std::map<char,int>::iterator it = mymap.begin();
+			do {
+				std::cout << it->first << " => " << it->second << '\n';
+			} while (mycomp((*it++).first, highest));
+		}
+		// ------ VALUE COMPARE ------
+		{
+			std::cout << "\n------------- FT Map (value_comp subclass) -------------" << std::endl;
+			std::map<char,int> mymap;
+			mymap['x']=1001;
+			mymap['y']=2002;
+			mymap['z']=3003;
+			std::cout << "mymap contains:\n";
+			std::pair<char,int> highest = *mymap.rbegin();          // last element
+			std::map<char,int>::iterator it = mymap.begin();
+			do {
+				std::cout << it->first << " => " << it->second << '\n';
+			} while (mymap.value_comp()(*it++, highest));
+		}
+	}
+	// OPERATIONS:
+	{
+		// ------ FIND ------
+		{
+			std::cout << "\n------------- FT Map (find) -------------" << std::endl;
+			NS::map<char, int> mymap;
+			NS::map<char, int>::iterator it;
+			mymap['a'] = 50;
+			mymap['c'] = 100;
+			mymap['d'] = 150;
+			mymap['b'] = 200;
+			it = mymap.find('b');
+			if (it != mymap.end())
+				mymap.erase(it);
+			std::cout << "mymap size: " <<  mymap.size() << std::endl;
+			std::cout << "elements in mymap:" << std::endl;
+			std::cout << "  a => " << mymap.find('a')->second << std::endl;
+			std::cout << "  c => " << mymap.find('c')->second << std::endl;
+			std::cout << "  d => " << mymap.find('d')->second << std::endl;
+			std::cout << "b => end() iterator ? (should be 1): " << (mymap.find('b') == mymap.end()) << std::endl;
+		}
+		// ------ COUNT ------
+		{
+			std::cout << "\n------------- FT Map (count) -------------" << std::endl;
+			NS::map<char, int> mymap;
+			mymap['a'] = 101;
+			mymap['c'] = 202;
+			mymap['f'] = 303;
+			std::cout << "mymap contains:" << std::endl;
+			for (NS::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+				std::cout << it->first << " => " << it->second << std::endl;
+			for (char c = 'a'; c < 'h'; c++)
+			{
+				std::cout << c;
+				if (mymap.count(c) > 0)
+					std::cout << " is an element of mymap." << std::endl;
+				else
+					std::cout << " is not an element of mymap." << std::endl;
+			}
+		}
+		// ------ UPPER / LOWER BOUNDS ------
+		{
+			std::cout << "\n--------- FT Map (upper & lower bounds) ----------" << std::endl;
+			NS::map<char, int> mymap;
+			NS::map<char, int>::iterator itlow, itup;
+			mymap['a'] = 20;
+			mymap['c'] = 40;
+			mymap['e'] = 60;
+			mymap['g'] = 80;
+			mymap['i'] = 100;
+			std::cout << "mymap contains " << std::endl;
+			for (NS::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+				std::cout << "  " << it->first << " => " << it->second << std::endl;
+			std::cout << "lower_bound(c):  " << mymap.lower_bound('c')->first << std::endl;
+			std::cout << "lower_bound(d):  " << mymap.lower_bound('d')->first << std::endl;
+			std::cout << "upper_bound(c):  " << mymap.upper_bound('c')->first << std::endl;
+			std::cout << "upper_bound(d):  " << mymap.upper_bound('d')->first << std::endl;
+
+			itlow = mymap.lower_bound('c');
+			itup = mymap.upper_bound('g');
+			mymap.erase(itlow, itup);
+			std::cout << "\nRange [c - g] erased. Map should now contains \'a\' and \'i\'" << std::endl;
+			for (NS::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+				std::cout << it->first << " => " << it->second << std::endl;
+		}
+		// ------ EQUAL RANGE ------
+		{
+			std::cout << "\n------------- FT Map (equal_range) -------------" << std::endl;
+			NS::map<char, int> mymap;
+			mymap['a'] = 10;
+			mymap['b'] = 20;
+			mymap['c'] = 30;
+			std::cout << "mymap contains " << std::endl;
+			for (NS::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+				std::cout << it->first << " => " << it->second << std::endl;
+
+			NS::pair<NS::map<char, int>::iterator, NS::map<char, int>::iterator> ret;
+			ret = mymap.equal_range('b');
+			std::cout << "lower bound to b points to: ";
+			std::cout << ret.first->first << " => " << ret.first->second << std::endl;
+			std::cout << "upper bound to b points to: ";
+			std::cout << ret.second->first << " => " << ret.second->second << std::endl;
+		}
+	}
 }
 
 }
