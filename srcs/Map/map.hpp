@@ -202,11 +202,40 @@ namespace ft
 					this->erase(first++);
 			}
 
+			void swap(map& x)
+			{
+				node_ptr		tmp_root = this->_root;
+				key_compare		tmp_cmp = this->_key_cmp;
+				allocator_type	tmp_alloc = this->_alloc;
+				size_type		tmp_size = this->_size;
+
+				this->_root = x._root;
+				x._root = tmp_root;
+				this->_key_cmp = x._key_cmp;
+				x._key_cmp = tmp_cmp;
+				this->_alloc = x._alloc;
+				x._alloc = tmp_alloc;
+				this->_size = x._size;
+				x._size = tmp_size;
+			}
+
 			void clear(void)
 			{
 				if (this->_size == 0)
 					return ;
 				erase(begin(), end());
+			}
+
+// -----------  OBSERVERS -----------
+
+			key_compare key_comp(void) const
+			{
+				return (this->_key_cmp);
+			}
+
+			value_compare value_comp(void) const
+			{
+				return (this->_val_cmp);
 			}
 
 // -----------  OPERATIONS -----------
