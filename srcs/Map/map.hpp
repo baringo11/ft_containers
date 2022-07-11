@@ -125,6 +125,30 @@ namespace ft
 			reverse_iterator rend() { return reverse_iterator(this->begin()); }
 			const_reverse_iterator rend() const { return const_reverse_iterator(this->begin()); }
 
+// ----------- CAPACITY -----------
+
+			bool empty(void) const
+			{
+				return (this->_size == 0 ? true : false);
+			}
+
+			size_type size(void) const
+			{
+				return (this->_size);
+			}
+
+			size_type max_size(void) const
+			{
+				return (this->_alloc.max_size());
+			}
+
+// ----------- ELEMENT ACCESS -----------
+
+			mapped_type& operator[] (const key_type& k)
+			{
+				return (this->insert(value_type(k, mapped_type()))).first->second;
+			}
+
 // -----------  MODIFIERS -----------
 
 			ft::pair<iterator, bool> insert(const value_type& val)
