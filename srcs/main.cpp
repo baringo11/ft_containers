@@ -751,13 +751,83 @@ int main()
 }
 
 /* ///////////////   MAP   \\\\\\\\\\\\\\\\ */
+{}
 {
 	std::cout << "\n\n\n*************************************************************************" << std::endl;
 	std::cout << "***************************    MAP    ***********************************" << std::endl;
 	std::cout << "*************************************************************************" << std::endl;
-	NS::map<int, char> myMap;
+
+	/* ///////////////   PAIR   \\\\\\\\\\\\\\\\ */
+	{
+		// ------ CONSTRUCTORS ------
+		{
+			std::cout << "\n------------- FT Pair (constructor) -------------" << std::endl;
+			NS::pair<std::string, double> product1;
+			NS::pair<std::string, double> product2("tomatoes", 2.30);
+			NS::pair<std::string, double> product3(product2);
+			product2.first = "shoes";
+			product2.second = 39.90;
+			std::cout << "The price of " << product1.first << " is $" << product1.second << std::endl;
+			std::cout << "The price of " << product2.first << " is $" << product2.second << std::endl;
+			std::cout << "The price of " << product3.first << " is $" << product3.second << std::endl;
+		
+		}
+		// ------ OPERATOR = ------
+		{
+			std::cout << "\n------------- FT Pair (operator=) -------------" << std::endl;
+			NS::pair<std::string, int> planet, homeplanet;
+			planet = NS::make_pair("Earth", 6371);
+			homeplanet = planet;
+			std::cout << "Home planet (should be Earth): " << homeplanet.first << std::endl;
+			std::cout << "Planet radius in km (should be 6371): " << homeplanet.second << std::endl;
+		}
+		// ------ MAKE PAIR ------
+		{
+			std::cout << "\n------------- FT Pair (make_pair) -------------" << std::endl;
+			NS::pair<int, int> foo;
+			NS::pair<int, int> bar;
+			NS::pair<double, std::string> boo;
+			foo = NS::make_pair(10, 20);
+			bar = NS::make_pair(10.5, 'A'); // implicit conversion to 65
+			boo = NS::make_pair(20.5, "hello");
+			std::cout << "foo: " << foo.first << ", " << foo.second << std::endl;
+			std::cout << "bar: " << bar.first << ", " << bar.second << std::endl;
+			std::cout << "bar: " << bar.first << ", " << bar.second << std::endl;
+		}
+		// ------ RELATIONAL OPERATORS------
+		{
+			std::cout << "\n------------- FT Pair (relational operators) -------------" << std::endl;
+			NS::pair<int, char> foo(10, 'z');
+			NS::pair<int, char> bar(10, 'z');
+			if (foo == bar)
+				std::cout << "foo and bar are equal" << std::endl;
+			if (foo != bar)
+				std::cout << "foo and bar are not equal" << std::endl;
+			if (foo < bar)
+				std::cout << "foo is less than bar" << std::endl;
+			if (foo > bar)
+				std::cout << "foo is greater than bar" << std::endl;
+			if (foo <= bar)
+				std::cout << "foo is less than or equal to bar" << std::endl;
+			if (foo >= bar)
+				std::cout << "foo is greater than or equal to bar" << std::endl;
+			std::cout << std::endl;
+			NS::pair<int, char> baz(10, 'a');
+			if (foo == baz)
+				std::cout << "foo and baz are equal" << std::endl;
+			if (foo != baz)
+				std::cout << "foo and baz are not equal" << std::endl;
+			if (foo < baz)
+				std::cout << "foo is less than baz" << std::endl;
+			if (foo > baz)
+				std::cout << "foo is greater than baz" << std::endl;
+			if (foo <= baz)
+				std::cout << "foo is less than or equal to baz" << std::endl;
+			if (foo >= baz)
+				std::cout << "foo is greater than or equal to baz" << std::endl;
+		}
+	}
 
 }
-
 
 }
