@@ -1,4 +1,4 @@
-NAME = ft_container
+NAME = ft_containers
 CXX = clang++
 CXXFLAGS = -Werror -Wall -Wextra -std=c++98 -IVector -IStack -IMap
 

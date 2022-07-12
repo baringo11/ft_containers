@@ -476,22 +476,22 @@ int main()
 			std::cout << "Size of bar before     " << bar.size() << std::endl;
 			std::cout << "Capacity of bar before " << bar.capacity() << std::endl << std::endl;
 			
-			foo.swap(bar);
-			std::cout << "SWAP!" << std::endl << std::endl;
-
 			it1 = foo.begin();
 			it2 = bar.begin();
 
+			foo.swap(bar);
+			std::cout << "SWAP!" << std::endl << std::endl;
+
 			std::cout << "foo contains:";
-			for (; it1 != foo.end(); it1++)
-				std::cout << ' ' << *it1;
+			for (; it2 != foo.end(); it2++)
+				std::cout << ' ' << *it2;
 			std::cout << std::endl;
 			std::cout << "Size of foo     " << foo.size() << std::endl;
 			std::cout << "Capacity of foo " << foo.capacity() << std::endl << std::endl;
 
 			std::cout << "bar contains:";
-			for (; it2 != bar.end(); it2++)
-				std::cout << ' ' << *it2;
+			for (; it1 != bar.end(); it1++)
+				std::cout << ' ' << *it1;
 			std::cout << std::endl;
 			std::cout << "Size of bar     " << bar.size() << std::endl;
 			std::cout << "Capacity of bar " << bar.capacity() << std::endl;

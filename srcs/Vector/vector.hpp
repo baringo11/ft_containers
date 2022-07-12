@@ -333,7 +333,6 @@ namespace ft
 					this->_alloc.construct(new_array + i, this->_array[i]);
 					this->_alloc.destroy(this->_array + i);
 				}
-				//if (this->_capacity != 0)
 				this->_alloc.deallocate(this->_array, this->_capacity);
 				this->_array = new_array;
 				this->_capacity = n;
